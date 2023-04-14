@@ -9,7 +9,7 @@ from rest_framework.permissions import (
 
 from .permissions import IsAuthorOrReadOnly
 
-from posts.models import Group, Post, Comment, Follow
+from posts.models import Group, Post, Comment
 
 from .serializers import (
     GroupSerializer,
@@ -35,7 +35,6 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     '''Вьюсет для работы с моделью Group.'''
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -53,8 +52,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         '''Метод получения всех комментариев поста.'''
         post_id = self.kwargs.get("post_id")
-        queryset = Comment.objects.filter(post=post_id)
-        return queryset
+        return Comment.objects.filter(post=post_id)
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -70,4 +68,5 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         '''Метод получения всех подписок.'''
-        return Follow.objects.filter(user=self.request.user)
+        user = self.request.user
+        return user.follower.all()

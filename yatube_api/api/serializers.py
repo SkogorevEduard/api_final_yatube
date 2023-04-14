@@ -41,7 +41,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    '''Сериализатор для модели Comment.'''
+    '''Сериализатор для модели Follow.'''
     user = serializers.SlugRelatedField(
         read_only=True,
         default=serializers.CurrentUserDefault(),
